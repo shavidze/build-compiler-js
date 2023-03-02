@@ -90,8 +90,7 @@ const fs = require("fs");
 fs.readFile("./test.txt", "utf-8", function (err, data) {
     const tokens = tokenizer(data);
     for (const token of tokens) {
-        console.log({ token });
-        debugger;
+        console.log("hm", { token });
     }
 });
 //# sourceMappingURL=Lexer.js.map
