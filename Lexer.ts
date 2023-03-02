@@ -1,11 +1,14 @@
 export enum TokenType {
+  //Literal types
   Number,
   Identifier,
+  //Keywords
+  Let,
+  //Grouping * Operators
   Equals,
   OpenParen,
   CloseParen,
   BinaryOperator,
-  Let,
   EndOfLine,
 }
 
@@ -79,6 +82,7 @@ export function tokenizer(src: string): Token[] {
       }
     }
   }
+  tokens.push({ type: TokenType.EndOfLine, value: "EndOfFile" });
   return tokens;
 }
 

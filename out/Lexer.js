@@ -3,13 +3,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.tokenizer = exports.TokenType = void 0;
 var TokenType;
 (function (TokenType) {
+    //Literal types
     TokenType[TokenType["Number"] = 0] = "Number";
     TokenType[TokenType["Identifier"] = 1] = "Identifier";
-    TokenType[TokenType["Equals"] = 2] = "Equals";
-    TokenType[TokenType["OpenParen"] = 3] = "OpenParen";
-    TokenType[TokenType["CloseParen"] = 4] = "CloseParen";
-    TokenType[TokenType["BinaryOperator"] = 5] = "BinaryOperator";
-    TokenType[TokenType["Let"] = 6] = "Let";
+    //Keywords
+    TokenType[TokenType["Let"] = 2] = "Let";
+    //Grouping * Operators
+    TokenType[TokenType["Equals"] = 3] = "Equals";
+    TokenType[TokenType["OpenParen"] = 4] = "OpenParen";
+    TokenType[TokenType["CloseParen"] = 5] = "CloseParen";
+    TokenType[TokenType["BinaryOperator"] = 6] = "BinaryOperator";
     TokenType[TokenType["EndOfLine"] = 7] = "EndOfLine";
 })(TokenType = exports.TokenType || (exports.TokenType = {}));
 const KEYWORDS = {
@@ -79,6 +82,7 @@ function tokenizer(src) {
             }
         }
     }
+    tokens.push({ type: TokenType.EndOfLine, value: "EndOfFile" });
     return tokens;
 }
 exports.tokenizer = tokenizer;
