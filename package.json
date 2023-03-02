@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node out/Lexer.js",
+    "dev": "tsc && node out/Lexer.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
