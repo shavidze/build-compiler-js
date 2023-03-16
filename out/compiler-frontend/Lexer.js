@@ -4,19 +4,21 @@ exports.tokenizer = exports.TokenType = void 0;
 var TokenType;
 (function (TokenType) {
     //Literal types
-    TokenType[TokenType["Number"] = 0] = "Number";
-    TokenType[TokenType["Identifier"] = 1] = "Identifier";
+    TokenType[TokenType["Null"] = 0] = "Null";
+    TokenType[TokenType["Number"] = 1] = "Number";
+    TokenType[TokenType["Identifier"] = 2] = "Identifier";
     //Keywords
-    TokenType[TokenType["Let"] = 2] = "Let";
+    TokenType[TokenType["Let"] = 3] = "Let";
     //Grouping * Operators
-    TokenType[TokenType["Equals"] = 3] = "Equals";
-    TokenType[TokenType["OpenParen"] = 4] = "OpenParen";
-    TokenType[TokenType["CloseParen"] = 5] = "CloseParen";
-    TokenType[TokenType["BinaryOperator"] = 6] = "BinaryOperator";
-    TokenType[TokenType["EndOfLine"] = 7] = "EndOfLine";
+    TokenType[TokenType["Equals"] = 4] = "Equals";
+    TokenType[TokenType["OpenParen"] = 5] = "OpenParen";
+    TokenType[TokenType["CloseParen"] = 6] = "CloseParen";
+    TokenType[TokenType["BinaryOperator"] = 7] = "BinaryOperator";
+    TokenType[TokenType["EndOfLine"] = 8] = "EndOfLine";
 })(TokenType = exports.TokenType || (exports.TokenType = {}));
 const KEYWORDS = {
     let: TokenType.Let,
+    null: TokenType.Null,
 };
 function token(value = "", type) {
     return { value, type };
@@ -68,11 +70,11 @@ function tokenizer(src) {
                     ident += tokensArray.shift();
                 }
                 const reserved = KEYWORDS[ident]; // check if the ident is reserved word or just a identifier
-                if (reserved == undefined) {
-                    tokens.push(token(ident, TokenType.Identifier));
+                if (typeof reserved === "number") {
+                    tokens.push(token(ident, reserved));
                 }
                 else {
-                    tokens.push(token(ident, reserved));
+                    tokens.push(token(ident, TokenType.Identifier));
                 }
             }
             else if (isSkippAble(tokensArray[0])) {

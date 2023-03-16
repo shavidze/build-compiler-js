@@ -1,5 +1,6 @@
 export enum TokenType {
   //Literal types
+  Null,
   Number,
   Identifier,
   //Keywords
@@ -19,6 +20,7 @@ export interface Token {
 
 const KEYWORDS: Record<string, TokenType> = {
   let: TokenType.Let,
+  null: TokenType.Null,
 };
 
 function token(value = "", type: TokenType) {
@@ -75,10 +77,10 @@ export function tokenizer(src: string): Token[] {
           ident += tokensArray.shift();
         }
         const reserved = KEYWORDS[ident]; // check if the ident is reserved word or just a identifier
-        if (reserved == undefined) {
-          tokens.push(token(ident, TokenType.Identifier));
-        } else {
+        if (typeof reserved === "number") {
           tokens.push(token(ident, reserved));
+        } else {
+          tokens.push(token(ident, TokenType.Identifier));
         }
       } else if (isSkippAble(tokensArray[0])) {
         tokensArray.shift();
