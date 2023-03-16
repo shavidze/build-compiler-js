@@ -10,6 +10,6 @@ async function repl() {
       process.exit();
     }
     const program = parser.produceAstTree(input);
-    console.log(program);
+    console.log(JSON.stringify(program, null, 4));
   }
 }

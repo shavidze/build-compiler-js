@@ -41,25 +41,27 @@ function tokenizer(src) {
         }
         else if (tokensArray[0] === ")") {
             tokens.push(token(tokensArray.shift(), TokenType.CloseParen));
-        }
+        } // hanlde binary operators
         else if (tokensArray[0] === "+" ||
             tokensArray[0] === "-" ||
             tokensArray[0] === "/" ||
-            tokensArray[0] === "*") {
+            tokensArray[0] === "*" ||
+            tokensArray[0] === "%") {
             tokens.push(token(tokensArray.shift(), TokenType.BinaryOperator));
-        }
+        } // handle conditional & assignment tokens
         else if (tokensArray[0] === "=") {
             tokens.push(token(tokensArray.shift(), TokenType.Equals));
-        }
+        } //handle multicharacter tokens like 123 or let or <=, we should check if it's correct one
         else {
-            //handle multicharacter tokens like 123 or let or <=, we should check if it's correct one
+            // handle numeric literalls -> integers
             if (isInt(tokensArray[0])) {
                 let num = "";
                 while (tokensArray.length > 0 && isInt(tokensArray[0])) {
                     num += tokensArray.shift();
                 }
+                //append new numeric token
                 tokens.push(token(num, TokenType.Number));
-            }
+            } // hanlde identifier & keyword tokens
             else if (isAlpha(tokensArray[0])) {
                 let ident = "";
                 while (tokensArray.length > 0 && isAlpha(tokensArray[0])) {
@@ -70,7 +72,7 @@ function tokenizer(src) {
                     tokens.push(token(ident, TokenType.Identifier));
                 }
                 else {
-                    tokens.push(token(ident, TokenType.Identifier));
+                    tokens.push(token(ident, reserved));
                 }
             }
             else if (isSkippAble(tokensArray[0])) {

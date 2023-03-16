@@ -46,24 +46,30 @@ export function tokenizer(src: string): Token[] {
       tokens.push(token(tokensArray.shift(), TokenType.OpenParen));
     } else if (tokensArray[0] === ")") {
       tokens.push(token(tokensArray.shift(), TokenType.CloseParen));
-    } else if (
+    } // hanlde binary operators
+    else if (
       tokensArray[0] === "+" ||
       tokensArray[0] === "-" ||
       tokensArray[0] === "/" ||
-      tokensArray[0] === "*"
+      tokensArray[0] === "*" ||
+      tokensArray[0] === "%"
     ) {
       tokens.push(token(tokensArray.shift(), TokenType.BinaryOperator));
-    } else if (tokensArray[0] === "=") {
+    } // handle conditional & assignment tokens
+    else if (tokensArray[0] === "=") {
       tokens.push(token(tokensArray.shift(), TokenType.Equals));
-    } else {
-      //handle multicharacter tokens like 123 or let or <=, we should check if it's correct one
+    } //handle multicharacter tokens like 123 or let or <=, we should check if it's correct one
+    else {
+      // handle numeric literalls -> integers
       if (isInt(tokensArray[0])) {
         let num = "";
         while (tokensArray.length > 0 && isInt(tokensArray[0])) {
           num += tokensArray.shift();
         }
+        //append new numeric token
         tokens.push(token(num, TokenType.Number));
-      } else if (isAlpha(tokensArray[0])) {
+      } // hanlde identifier & keyword tokens
+      else if (isAlpha(tokensArray[0])) {
         let ident = "";
         while (tokensArray.length > 0 && isAlpha(tokensArray[0])) {
           ident += tokensArray.shift();
@@ -72,7 +78,7 @@ export function tokenizer(src: string): Token[] {
         if (reserved == undefined) {
           tokens.push(token(ident, TokenType.Identifier));
         } else {
-          tokens.push(token(ident, TokenType.Identifier));
+          tokens.push(token(ident, reserved));
         }
       } else if (isSkippAble(tokensArray[0])) {
         tokensArray.shift();
