@@ -33,21 +33,22 @@ function eval_numeric_binary_expr(
   rhs: NumberVal,
   operator: string
 ): NumberVal {
-  let result: number;
+  let result: number = 0;
   switch (operator) {
     case "+":
-      result = lhs.value + rhs.value;
+      return { type: "number", value: (result = lhs.value + rhs.value) };
     case "-":
-      result = lhs.value - rhs.value;
+      return { type: "number", value: (result = lhs.value - rhs.value) };
     case "/":
       // TODO: check on zero
-      result = lhs.value / rhs.value;
+      return { type: "number", value: (result = lhs.value / rhs.value) };
     case "*":
-      result = lhs.value * rhs.value;
+      return { type: "number", value: (result = lhs.value * rhs.value) };
     case "%":
-      result = lhs.value % rhs.value;
+      return { type: "number", value: (result = lhs.value % rhs.value) };
+    default:
+      return { value: result, type: "number" };
   }
-  return { value: result, type: "number" };
 }
 
 export function evaluate(astNode: Stmt): RuntimeVal {

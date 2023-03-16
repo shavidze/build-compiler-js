@@ -11,7 +11,7 @@ async function repl() {
       process.exit();
     }
     const program = parser.produceAstTree(input);
-    console.log(JSON.stringify(program, null, 4));
     const result = evaluate(program);
+    console.log(JSON.stringify(result, null, 4));
   }
 }
