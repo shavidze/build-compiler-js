@@ -14,7 +14,11 @@ export function eval_var_declaration(
     ? evaluate(declaration.value, context)
     : MK_NULL();
   console.log("aqaa", context);
-  return context.declareVariable(declaration.identifier, value);
+  return context.declareVariable(
+    declaration.identifier,
+    value,
+    declaration.constant
+  );
 }
 
 export function eval_program(program: Program, context: Context): RuntimeVal {

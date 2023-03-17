@@ -8,6 +8,7 @@ export function eval_identifier(
   context: Context
 ): RuntimeVal {
   console.log("look up variable");
+  console.log("context", context);
   const val = context.lookUpVar(ident.symbol);
   return val;
 }

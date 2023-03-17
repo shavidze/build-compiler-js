@@ -3,28 +3,33 @@ import { RuntimeVal } from "./values";
 export default class Context {
   private parent?: Context;
   private variables: Map<string, RuntimeVal>;
-
+  private constants: Set<string>;
   constructor(parentContext?: Context) {
     this.parent = parentContext;
     this.variables = new Map();
+    this.constants = new Set();
   }
 
-  public declareVariable(varname: string, value: RuntimeVal): RuntimeVal {
+  public declareVariable(
+    varname: string,
+    value: RuntimeVal,
+    constant: boolean
+  ): RuntimeVal {
     if (this.variables.has(varname)) {
       throw new Error(
         `Can't declare variable ${varname} since it's already been declared`
       );
     }
     this.variables.set(varname, value);
-    console.log("variables - ", this.variables);
+    if (constant) {
+      this.constants.add(varname);
+    }
     return value;
   }
   public resolve(varname: string): Context {
-    console.log("resolved ? ", this.variables);
     if (this.variables.has(varname)) {
       return this;
     }
-    console.log(this.parent);
 
     if (this.parent === undefined) {
       throw new Error(`Can't resolve '${varname}' as it doesn't exist.`);
@@ -34,6 +39,10 @@ export default class Context {
 
   public assignVar(varname: string, value: RuntimeVal): RuntimeVal {
     const context = this.resolve(varname);
+    //can't assign to contant
+    if (context.constants.has(varname)) {
+      throw `Cann't reasign to variable ${varname} since it's a constant`;
+    }
     context.variables.set(varname, value);
     return value;
   }

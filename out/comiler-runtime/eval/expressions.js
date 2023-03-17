@@ -5,6 +5,7 @@ const interpreter_1 = require("../interpreter");
 const values_1 = require("../values");
 function eval_identifier(ident, context) {
     console.log("look up variable");
+    console.log("context", context);
     const val = context.lookUpVar(ident.symbol);
     return val;
 }

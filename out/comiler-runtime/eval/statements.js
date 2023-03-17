@@ -10,7 +10,7 @@ function eval_var_declaration(declaration, context) {
         ? (0, interpreter_1.evaluate)(declaration.value, context)
         : (0, values_1.MK_NULL)();
     console.log("aqaa", context);
-    return context.declareVariable(declaration.identifier, value);
+    return context.declareVariable(declaration.identifier, value, declaration.constant);
 }
 exports.eval_var_declaration = eval_var_declaration;
 function eval_program(program, context) {
