@@ -11,6 +11,7 @@ import Context from "./context";
 import { eval_binary_expr, eval_identifier } from "./eval/expressions";
 import { eval_program, eval_var_declaration } from "./eval/statements";
 export function evaluate(astNode: Stmt, context: Context): RuntimeVal {
+  debugger;
   switch (astNode.kind) {
     case "Program":
       return eval_program(astNode as Program, context);

@@ -4,6 +4,7 @@ exports.evaluate = void 0;
 const expressions_1 = require("./eval/expressions");
 const statements_1 = require("./eval/statements");
 function evaluate(astNode, context) {
+    debugger;
     switch (astNode.kind) {
         case "Program":
             return (0, statements_1.eval_program)(astNode, context);

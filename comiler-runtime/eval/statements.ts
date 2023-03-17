@@ -9,11 +9,9 @@ export function eval_var_declaration(
   context: Context
 ): RuntimeVal {
   //check if declaration is expression
-  console.log("value - ", declaration);
   const value = declaration.value
     ? evaluate(declaration.value, context)
     : MK_NULL();
-  console.log("aqaa", context);
   return context.declareVariable(
     declaration.identifier,
     value,

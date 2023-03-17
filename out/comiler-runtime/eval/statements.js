@@ -16,6 +16,8 @@ exports.eval_var_declaration = eval_var_declaration;
 function eval_program(program, context) {
     let lastEval = (0, values_1.MK_NULL)();
     for (const stmt of program.body) {
+        console.log("program - ", program);
+        console.log("stmt -", stmt);
         lastEval = (0, interpreter_1.evaluate)(stmt, context);
     }
     return lastEval;
