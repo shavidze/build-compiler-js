@@ -16,12 +16,16 @@ export default class Context {
       );
     }
     this.variables.set(varname, value);
+    console.log("variables - ", this.variables);
     return value;
   }
   public resolve(varname: string): Context {
+    console.log("resolved ? ", this.variables);
     if (this.variables.has(varname)) {
       return this;
     }
+    console.log(this.parent);
+
     if (this.parent === undefined) {
       throw new Error(`Can't resolve '${varname}' as it doesn't exist.`);
     }

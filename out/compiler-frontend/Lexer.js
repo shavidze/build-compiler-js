@@ -8,15 +8,18 @@ var TokenType;
     TokenType[TokenType["Identifier"] = 1] = "Identifier";
     //Keywords
     TokenType[TokenType["Let"] = 2] = "Let";
+    TokenType[TokenType["Const"] = 3] = "Const";
     //Grouping * Operators
-    TokenType[TokenType["Equals"] = 3] = "Equals";
-    TokenType[TokenType["OpenParen"] = 4] = "OpenParen";
-    TokenType[TokenType["CloseParen"] = 5] = "CloseParen";
-    TokenType[TokenType["BinaryOperator"] = 6] = "BinaryOperator";
-    TokenType[TokenType["EndOfLine"] = 7] = "EndOfLine";
+    TokenType[TokenType["Equals"] = 4] = "Equals";
+    TokenType[TokenType["OpenParen"] = 5] = "OpenParen";
+    TokenType[TokenType["CloseParen"] = 6] = "CloseParen";
+    TokenType[TokenType["Semicolon"] = 7] = "Semicolon";
+    TokenType[TokenType["BinaryOperator"] = 8] = "BinaryOperator";
+    TokenType[TokenType["EndOfLine"] = 9] = "EndOfLine";
 })(TokenType = exports.TokenType || (exports.TokenType = {}));
 const KEYWORDS = {
     let: TokenType.Let,
+    const: TokenType.Const,
 };
 function token(value = "", type) {
     return { value, type };
@@ -51,6 +54,9 @@ function tokenizer(src) {
         } // handle conditional & assignment tokens
         else if (tokensArray[0] === "=") {
             tokens.push(token(tokensArray.shift(), TokenType.Equals));
+        }
+        else if (tokensArray[0] === ";") {
+            tokens.push(token(tokensArray.shift(), TokenType.Semicolon));
         } //handle multicharacter tokens like 123 or let or <=, we should check if it's correct one
         else {
             // handle numeric literalls -> integers

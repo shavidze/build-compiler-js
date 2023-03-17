@@ -5,10 +5,12 @@ export enum TokenType {
 
   //Keywords
   Let,
+  Const,
   //Grouping * Operators
   Equals,
   OpenParen,
   CloseParen,
+  Semicolon,
   BinaryOperator,
   EndOfLine,
 }
@@ -20,6 +22,7 @@ export interface Token {
 
 const KEYWORDS: Record<string, TokenType> = {
   let: TokenType.Let,
+  const: TokenType.Const,
 };
 
 function token(value = "", type: TokenType) {
@@ -59,6 +62,8 @@ export function tokenizer(src: string): Token[] {
     } // handle conditional & assignment tokens
     else if (tokensArray[0] === "=") {
       tokens.push(token(tokensArray.shift(), TokenType.Equals));
+    } else if (tokensArray[0] === ";") {
+      tokens.push(token(tokensArray.shift(), TokenType.Semicolon));
     } //handle multicharacter tokens like 123 or let or <=, we should check if it's correct one
     else {
       // handle numeric literalls -> integers

@@ -11,7 +11,7 @@ class Parser {
         return token;
     }
     expect(type, err) {
-        const prev = this.tokens.shift();
+        const prev = this.eat();
         if (!prev || prev.type != type) {
             console.error("Parser Error:\n", err, prev, " - Expecting: ", type);
             process.exit();
@@ -33,7 +33,38 @@ class Parser {
         return program;
     }
     parse_stmt() {
-        return this.parse_expr();
+        switch (this.firstToken().type) {
+            case Lexer_1.TokenType.Let:
+            case Lexer_1.TokenType.Const:
+                return this.parse_var_declaration();
+            default:
+                return this.parse_expr();
+        }
+    }
+    // const | let -> identifier -> ; | = -> Expr;
+    parse_var_declaration() {
+        const isConst = this.eat().type === Lexer_1.TokenType.Const;
+        const identifier = this.expect(Lexer_1.TokenType.Identifier, "Exptected identifier name following let | const keywords.").value;
+        if (this.firstToken().type === Lexer_1.TokenType.Semicolon) {
+            this.eat();
+            if (isConst) {
+                throw new Error(`Must assigne value to constant expression. No value is provided`);
+            }
+            return {
+                kind: "VarDeclaration",
+                constant: false,
+                identifier,
+            };
+        }
+        this.expect(Lexer_1.TokenType.Equals, "Expected equals token following by identifier in variable declataion.");
+        const declaration = {
+            kind: "VarDeclaration",
+            value: this.parse_expr(),
+            identifier,
+            constant: isConst,
+        };
+        this.expect(Lexer_1.TokenType.Semicolon, "Variable declaration statement must end with semicolon.");
+        return declaration;
     }
     parse_expr() {
         return this.parse_additive_expr();

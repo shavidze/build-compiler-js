@@ -12,12 +12,15 @@ class Context {
             throw new Error(`Can't declare variable ${varname} since it's already been declared`);
         }
         this.variables.set(varname, value);
+        console.log("variables - ", this.variables);
         return value;
     }
     resolve(varname) {
+        console.log("resolved ? ", this.variables);
         if (this.variables.has(varname)) {
             return this;
         }
+        console.log(this.parent);
         if (this.parent === undefined) {
             throw new Error(`Can't resolve '${varname}' as it doesn't exist.`);
         }
