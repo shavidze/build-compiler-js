@@ -1,8 +1,8 @@
 export enum TokenType {
   //Literal types
-  Null,
   Number,
   Identifier,
+
   //Keywords
   Let,
   //Grouping * Operators
@@ -20,7 +20,6 @@ export interface Token {
 
 const KEYWORDS: Record<string, TokenType> = {
   let: TokenType.Let,
-  null: TokenType.Null,
 };
 
 function token(value = "", type: TokenType) {

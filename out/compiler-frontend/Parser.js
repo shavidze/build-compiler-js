@@ -87,9 +87,6 @@ class Parser {
                     kind: "Identifier",
                     symbol: this.eat().value,
                 };
-            case Lexer_1.TokenType.Null:
-                this.eat();
-                return { kind: "NullLiteral", value: "null" };
             case Lexer_1.TokenType.Number:
                 return {
                     kind: "NumericLiteral",

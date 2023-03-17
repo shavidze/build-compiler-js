@@ -4,21 +4,19 @@ exports.tokenizer = exports.TokenType = void 0;
 var TokenType;
 (function (TokenType) {
     //Literal types
-    TokenType[TokenType["Null"] = 0] = "Null";
-    TokenType[TokenType["Number"] = 1] = "Number";
-    TokenType[TokenType["Identifier"] = 2] = "Identifier";
+    TokenType[TokenType["Number"] = 0] = "Number";
+    TokenType[TokenType["Identifier"] = 1] = "Identifier";
     //Keywords
-    TokenType[TokenType["Let"] = 3] = "Let";
+    TokenType[TokenType["Let"] = 2] = "Let";
     //Grouping * Operators
-    TokenType[TokenType["Equals"] = 4] = "Equals";
-    TokenType[TokenType["OpenParen"] = 5] = "OpenParen";
-    TokenType[TokenType["CloseParen"] = 6] = "CloseParen";
-    TokenType[TokenType["BinaryOperator"] = 7] = "BinaryOperator";
-    TokenType[TokenType["EndOfLine"] = 8] = "EndOfLine";
+    TokenType[TokenType["Equals"] = 3] = "Equals";
+    TokenType[TokenType["OpenParen"] = 4] = "OpenParen";
+    TokenType[TokenType["CloseParen"] = 5] = "CloseParen";
+    TokenType[TokenType["BinaryOperator"] = 6] = "BinaryOperator";
+    TokenType[TokenType["EndOfLine"] = 7] = "EndOfLine";
 })(TokenType = exports.TokenType || (exports.TokenType = {}));
 const KEYWORDS = {
     let: TokenType.Let,
-    null: TokenType.Null,
 };
 function token(value = "", type) {
     return { value, type };
