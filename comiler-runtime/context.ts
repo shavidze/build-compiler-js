@@ -1,13 +1,22 @@
-import { RuntimeVal } from "./values";
-
+import { MK_BOOL, MK_NULL, RuntimeVal } from "./values";
+function setupScope(context: Context) {
+  //create default global context
+  context.declareVariable("true", MK_BOOL(true), true);
+  context.declareVariable("false", MK_BOOL(false), true);
+  context.declareVariable("null", MK_NULL(), true);
+}
 export default class Context {
   private parent?: Context;
   private variables: Map<string, RuntimeVal>;
   private constants: Set<string>;
   constructor(parentContext?: Context) {
+    const global = parentContext ? true : false;
     this.parent = parentContext;
     this.variables = new Map();
     this.constants = new Set();
+    if (global) {
+      setupScope(this);
+    }
   }
 
   public declareVariable(

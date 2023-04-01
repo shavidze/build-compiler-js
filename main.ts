@@ -14,10 +14,6 @@ async function repl() {
   const parser = new Parser();
   const context = new Context();
 
-  context.declareVariable("true", MK_BOOL(true), true);
-  context.declareVariable("false", MK_BOOL(false), true);
-  context.declareVariable("null", MK_NULL(), true);
-
   while (true) {
     const input = prompt("> ");
     if (!input || input.includes("end")) {
