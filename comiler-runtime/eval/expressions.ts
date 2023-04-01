@@ -1,4 +1,8 @@
-import { BinaryExpr, Identifier } from "../../compiler-frontend/Ast";
+import {
+  AssignmentExpr,
+  BinaryExpr,
+  Identifier,
+} from "../../compiler-frontend/Ast";
 import Context from "../context";
 import { evaluate } from "../interpreter";
 import { RuntimeVal, NumberVal, MK_NULL } from "../values";
@@ -9,6 +13,17 @@ export function eval_identifier(
 ): RuntimeVal {
   const val = context.lookUpVar(ident.symbol);
   return val;
+}
+
+export function eval_assignment(
+  node: AssignmentExpr,
+  context: Context
+): RuntimeVal {
+  if (node.assigne.kind !== "Identifier") {
+    throw `Invalid LHS inside assignment expr ${JSON.stringify(node.assigne)}`;
+  }
+  const varname = (node.assigne as Identifier).symbol;
+  return context.assignVar(varname, evaluate(node.value, context));
 }
 
 export function eval_binary_expr(

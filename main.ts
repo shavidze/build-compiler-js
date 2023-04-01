@@ -14,12 +14,17 @@ async function repl() {
   const parser = new Parser();
   const context = new Context();
 
+  context.declareVariable("true", MK_BOOL(true), true);
+  context.declareVariable("false", MK_BOOL(false), true);
+  context.declareVariable("null", MK_NULL(), true);
+
   while (true) {
     const input = prompt("> ");
     if (!input || input.includes("end")) {
       process.exit();
     }
     const program = parser.produceAstTree(input);
+    console.log("program - ", program);
     const result = evaluate(program, context);
     console.log(JSON.stringify(result, null, 4));
   }

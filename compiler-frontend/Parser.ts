@@ -6,6 +6,7 @@ import {
   NumericLiteral,
   Identifier,
   VarDeclaration,
+  AssignmentExpr,
 } from "./Ast";
 import { tokenizer, Token, TokenType } from "./Lexer";
 
@@ -88,7 +89,21 @@ export default class Parser {
   }
 
   private parse_expr(): Expr {
-    return this.parse_additive_expr();
+    return this.parse_assignment_expr();
+  }
+
+  private parse_assignment_expr(): Expr {
+    const left = this.parse_additive_expr();
+    if (this.firstToken().type === TokenType.Equals) {
+      this.eat();
+      const value = this.parse_assignment_expr();
+      return {
+        value,
+        assigne: left,
+        kind: "AssignmentExpr",
+      } as AssignmentExpr;
+    }
+    return left;
   }
 
   //მოქმედებების თანმიმდევრობა

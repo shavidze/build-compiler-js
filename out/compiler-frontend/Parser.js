@@ -67,7 +67,20 @@ class Parser {
         return declaration;
     }
     parse_expr() {
-        return this.parse_additive_expr();
+        return this.parse_assignment_expr();
+    }
+    parse_assignment_expr() {
+        const left = this.parse_additive_expr();
+        if (this.firstToken().type === Lexer_1.TokenType.Equals) {
+            this.eat();
+            const value = this.parse_assignment_expr();
+            return {
+                value,
+                assigne: left,
+                kind: "AssignmentExpr",
+            };
+        }
+        return left;
     }
     //მოქმედებების თანმიმდევრობა
     // Assignment Express

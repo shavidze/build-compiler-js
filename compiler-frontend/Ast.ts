@@ -1,6 +1,11 @@
 export type NodeType =
   //STATEMENT
-  "Program" | "VarDeclaration" | "NumericLiteral" | "Identifier" | "BinaryExpr";
+  | "Program"
+  | "VarDeclaration"
+  | "AssignmentExpr"
+  | "NumericLiteral"
+  | "Identifier"
+  | "BinaryExpr";
 
 //statement; let x = 45;
 export interface Stmt {
@@ -23,6 +28,14 @@ export interface VarDeclaration extends Stmt {
  * Expressions will get a value at runtime  unlike statements
  */
 export interface Expr extends Stmt {}
+
+// let x = {foo: "Bar"}
+// x.foo = "foo bar"
+export interface AssignmentExpr extends Expr {
+  kind: "AssignmentExpr";
+  assigne: Expr;
+  value: Expr;
+}
 
 export interface BinaryExpr extends Expr {
   kind: "BinaryExpr";
