@@ -1,6 +1,7 @@
 import { MK_BOOL, MK_NULL, RuntimeVal } from "./values";
-function setupScope(context: Context) {
+export function createGlobalEnv() {
   //create default global context
+  const context = new Context();
   context.declareVariable("true", MK_BOOL(true), true);
   context.declareVariable("false", MK_BOOL(false), true);
   context.declareVariable("null", MK_NULL(), true);
@@ -15,7 +16,7 @@ export default class Context {
     this.variables = new Map();
     this.constants = new Set();
     if (global) {
-      setupScope(this);
+      createGlobalEnv();
     }
   }
 

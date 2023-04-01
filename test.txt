@@ -1,1 +1,9 @@
-let x = 45 + 2 * 4
+let foo = 45 + 2 * 4
+const obj = {
+    a: 100,
+    b: 23,
+    foo,
+    complex: {
+        bar: true
+    }
+}

@@ -21,6 +21,8 @@ function evaluate(astNode, context) {
         //handle stmts
         case "VarDeclaration":
             return (0, statements_1.eval_var_declaration)(astNode, context);
+        case "ObjectLiteral":
+            return (0, expressions_1.eval_object_expr)(astNode, context);
         default:
             console.error("This AST Node has not yet been setup for interpretation", astNode);
             process.exit();

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.eval_numeric_binary_expr = exports.eval_binary_expr = exports.eval_assignment = exports.eval_identifier = void 0;
+exports.eval_object_expr = exports.eval_numeric_binary_expr = exports.eval_binary_expr = exports.eval_assignment = exports.eval_identifier = void 0;
 const interpreter_1 = require("../interpreter");
 const values_1 = require("../values");
 function eval_identifier(ident, context) {
@@ -44,4 +44,17 @@ function eval_numeric_binary_expr(lhs, rhs, operator) {
     }
 }
 exports.eval_numeric_binary_expr = eval_numeric_binary_expr;
+function eval_object_expr(obj, context) {
+    const object = {
+        type: "object",
+        properties: new Map(),
+    };
+    for (const [key, value] of object.properties) {
+        //handle valid key:pair
+        const runtimeVal = value === undefined ? context.lookUpVar(key) : (0, interpreter_1.evaluate)(value, context);
+        object.properties.set(key, runtimeVal);
+    }
+    return object;
+}
+exports.eval_object_expr = eval_object_expr;
 //# sourceMappingURL=expressions.js.map

@@ -4,6 +4,7 @@ import {
   BinaryExpr,
   Identifier,
   NumericLiteral,
+  ObjectLiteral,
   Program,
   Stmt,
   VarDeclaration,
@@ -13,9 +14,10 @@ import {
   eval_assignment,
   eval_binary_expr,
   eval_identifier,
+  eval_object_expr,
 } from "./eval/expressions";
 import { eval_program, eval_var_declaration } from "./eval/statements";
-export function evaluate(astNode: Stmt, context: Context): RuntimeVal {
+export function evaluate(astNode: Stmt | any, context: Context): RuntimeVal {
   switch (astNode.kind) {
     case "Program":
       return eval_program(astNode as Program, context);
@@ -33,6 +35,8 @@ export function evaluate(astNode: Stmt, context: Context): RuntimeVal {
     //handle stmts
     case "VarDeclaration":
       return eval_var_declaration(astNode as VarDeclaration, context);
+    case "ObjectLiteral":
+      return eval_object_expr(astNode as ObjectLiteral, context);
     default:
       console.error(
         "This AST Node has not yet been setup for interpretation",

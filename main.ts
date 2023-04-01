@@ -1,6 +1,6 @@
 import Parser from "./compiler-frontend/Parser";
 import { evaluate } from "./comiler-runtime/interpreter";
-import Context from "./comiler-runtime/context";
+import { createGlobalEnv } from "./comiler-runtime/context";
 import {
   MK_BOOL,
   MK_NULL,
@@ -12,7 +12,7 @@ repl();
 
 async function repl() {
   const parser = new Parser();
-  const context = new Context();
+  const context = new createGlobalEnv();
 
   while (true) {
     const input = prompt("> ");
@@ -20,7 +20,6 @@ async function repl() {
       process.exit();
     }
     const program = parser.produceAstTree(input);
-    console.log("program - ", program);
     const result = evaluate(program, context);
     console.log(JSON.stringify(result, null, 4));
   }

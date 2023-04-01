@@ -1,17 +1,28 @@
 export enum TokenType {
   //Literal types
   Number,
+  // x,y,nameOfVariable
   Identifier,
-
   //Keywords
   Let,
   Const,
   //Grouping * Operators
   Equals,
+  //()
   OpenParen,
   CloseParen,
+  //[]
+  OpenBrace,
+  CloseBrace,
+  //:
+  Colon,
+  //,
+  Comma,
+  //;
   Semicolon,
+  // * / + - %
   BinaryOperator,
+  // /n
   EndOfLine,
 }
 
@@ -40,7 +51,7 @@ function isInt(src: string) {
 }
 
 function isSkippAble(str: string) {
-  return str === " " || str == "\n" || str == "\t";
+  return str === " " || str == "\n" || str == "\t" || str == "\r";
 }
 export function tokenizer(src: string): Token[] {
   const tokens: Array<Token> = new Array<Token>();
@@ -50,7 +61,12 @@ export function tokenizer(src: string): Token[] {
       tokens.push(token(tokensArray.shift(), TokenType.OpenParen));
     } else if (tokensArray[0] === ")") {
       tokens.push(token(tokensArray.shift(), TokenType.CloseParen));
-    } // hanlde binary operators
+    } else if (tokensArray[0] === "{") {
+      tokens.push(token(tokensArray.shift(), TokenType.OpenBrace));
+    } else if (tokensArray[0] === "}") {
+      tokens.push(token(tokensArray.shift(), TokenType.CloseBrace));
+    }
+    // hanlde binary operators
     else if (
       tokensArray[0] === "+" ||
       tokensArray[0] === "-" ||
@@ -64,6 +80,10 @@ export function tokenizer(src: string): Token[] {
       tokens.push(token(tokensArray.shift(), TokenType.Equals));
     } else if (tokensArray[0] === ";") {
       tokens.push(token(tokensArray.shift(), TokenType.Semicolon));
+    } else if (tokensArray[0] === ":") {
+      tokens.push(token(tokensArray.shift(), TokenType.Colon));
+    } else if (tokensArray[0] === ",") {
+      tokens.push(token(tokensArray.shift(), TokenType.Comma));
     } //handle multicharacter tokens like 123 or let or <=, we should check if it's correct one
     else {
       // handle numeric literalls -> integers
@@ -101,7 +121,4 @@ export function tokenizer(src: string): Token[] {
 const fs = require("fs");
 fs.readFile("./test.txt", "utf-8", function (err, data) {
   const tokens = tokenizer(data);
-  for (const token of tokens) {
-    console.log("hm", { token });
-  }
 });

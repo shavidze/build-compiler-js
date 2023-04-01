@@ -1,11 +1,13 @@
+import { env } from "process";
 import {
   AssignmentExpr,
   BinaryExpr,
   Identifier,
+  ObjectLiteral,
 } from "../../compiler-frontend/Ast";
 import Context from "../context";
 import { evaluate } from "../interpreter";
-import { RuntimeVal, NumberVal, MK_NULL } from "../values";
+import { RuntimeVal, NumberVal, MK_NULL, ObjectVal } from "../values";
 
 export function eval_identifier(
   ident: Identifier,
@@ -63,4 +65,21 @@ export function eval_numeric_binary_expr(
     default:
       return { value: result, type: "number" };
   }
+}
+
+export function eval_object_expr(
+  obj: ObjectLiteral,
+  context: Context
+): RuntimeVal {
+  const object = {
+    type: "object",
+    properties: new Map<string, RuntimeVal>(),
+  } as ObjectVal;
+  for (const [key, value] of object.properties) {
+    //handle valid key:pair
+    const runtimeVal =
+      value === undefined ? context.lookUpVar(key) : evaluate(value, context);
+    object.properties.set(key, runtimeVal);
+  }
+  return object;
 }

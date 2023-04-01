@@ -7,6 +7,8 @@ import {
   Identifier,
   VarDeclaration,
   AssignmentExpr,
+  Property,
+  ObjectLiteral,
 } from "./Ast";
 import { tokenizer, Token, TokenType } from "./Lexer";
 
@@ -93,7 +95,8 @@ export default class Parser {
   }
 
   private parse_assignment_expr(): Expr {
-    const left = this.parse_additive_expr();
+    const left = this.parse_object_expr();
+
     if (this.firstToken().type === TokenType.Equals) {
       this.eat();
       const value = this.parse_assignment_expr();
@@ -104,6 +107,54 @@ export default class Parser {
       } as AssignmentExpr;
     }
     return left;
+  }
+  private parse_object_expr(): Expr {
+    // {prop[]}
+    if (this.firstToken().type !== TokenType.OpenBrace) {
+      return this.parse_additive_expr();
+    }
+    this.eat(); // advance past open brace
+    const properties = new Array<Property>();
+    while (this.not_eof() && this.firstToken().type != TokenType.CloseBrace) {
+      //{key: val, key2: val}
+      const key = this.expect(
+        TokenType.Identifier,
+        "Object literal key expected"
+      ).value;
+      // { x, }
+      if (this.firstToken().type == TokenType.Comma) {
+        this.eat();
+        properties.push({
+          key,
+          kind: "Property",
+          value: undefined,
+        } as Property);
+        continue;
+      } else if (this.firstToken().type == TokenType.CloseBrace) {
+        properties.push({
+          key,
+          kind: "Property",
+          value: undefined,
+        } as Property);
+        continue;
+      }
+      // { key: val}
+      this.expect(
+        TokenType.Colon,
+        "Missing colon following identifier in Object Expr"
+      );
+      // parse value expression of key
+      const value = this.parse_expr();
+      properties.push({ kind: "Property", value, key });
+      if (this.firstToken().type != TokenType.CloseBrace) {
+        this.expect(
+          TokenType.Comma,
+          "Expected comma or closing following property "
+        );
+      }
+    }
+    this.expect(TokenType.CloseBrace, "Object literal missing closing brace.");
+    return { kind: "ObjectLiteral", properties } as ObjectLiteral;
   }
 
   //მოქმედებების თანმიმდევრობა
@@ -164,7 +215,7 @@ export default class Parser {
           kind: "NumericLiteral",
           value: parseFloat(this.eat().value),
         } as NumericLiteral;
-      case TokenType.OpenParen: {
+      case (TokenType.OpenParen, TokenType.OpenBrace): {
         this.eat();
         const value = this.parse_expr();
         this.expect(

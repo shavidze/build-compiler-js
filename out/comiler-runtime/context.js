@@ -1,13 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createGlobalEnv = void 0;
+const values_1 = require("./values");
+function createGlobalEnv() {
+    //create default global context
+    const context = new Context();
+    context.declareVariable("true", (0, values_1.MK_BOOL)(true), true);
+    context.declareVariable("false", (0, values_1.MK_BOOL)(false), true);
+    context.declareVariable("null", (0, values_1.MK_NULL)(), true);
+}
+exports.createGlobalEnv = createGlobalEnv;
 class Context {
     parent;
     variables;
     constants;
     constructor(parentContext) {
+        const global = parentContext ? true : false;
         this.parent = parentContext;
         this.variables = new Map();
         this.constants = new Set();
+        if (global) {
+            createGlobalEnv();
+        }
     }
     declareVariable(varname, value, constant) {
         if (this.variables.has(varname)) {

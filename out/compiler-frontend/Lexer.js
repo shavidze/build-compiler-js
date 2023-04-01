@@ -5,17 +5,29 @@ var TokenType;
 (function (TokenType) {
     //Literal types
     TokenType[TokenType["Number"] = 0] = "Number";
+    // x,y,nameOfVariable
     TokenType[TokenType["Identifier"] = 1] = "Identifier";
     //Keywords
     TokenType[TokenType["Let"] = 2] = "Let";
     TokenType[TokenType["Const"] = 3] = "Const";
     //Grouping * Operators
     TokenType[TokenType["Equals"] = 4] = "Equals";
+    //()
     TokenType[TokenType["OpenParen"] = 5] = "OpenParen";
     TokenType[TokenType["CloseParen"] = 6] = "CloseParen";
-    TokenType[TokenType["Semicolon"] = 7] = "Semicolon";
-    TokenType[TokenType["BinaryOperator"] = 8] = "BinaryOperator";
-    TokenType[TokenType["EndOfLine"] = 9] = "EndOfLine";
+    //[]
+    TokenType[TokenType["OpenBrace"] = 7] = "OpenBrace";
+    TokenType[TokenType["CloseBrace"] = 8] = "CloseBrace";
+    //:
+    TokenType[TokenType["Colon"] = 9] = "Colon";
+    //,
+    TokenType[TokenType["Comma"] = 10] = "Comma";
+    //;
+    TokenType[TokenType["Semicolon"] = 11] = "Semicolon";
+    // * / + - %
+    TokenType[TokenType["BinaryOperator"] = 12] = "BinaryOperator";
+    // /n
+    TokenType[TokenType["EndOfLine"] = 13] = "EndOfLine";
 })(TokenType = exports.TokenType || (exports.TokenType = {}));
 const KEYWORDS = {
     let: TokenType.Let,
@@ -33,7 +45,7 @@ function isInt(src) {
     return char >= bounds[0] && char <= bounds[1];
 }
 function isSkippAble(str) {
-    return str === " " || str == "\n" || str == "\t";
+    return str === " " || str == "\n" || str == "\t" || str == "\r";
 }
 function tokenizer(src) {
     const tokens = new Array();
@@ -44,7 +56,14 @@ function tokenizer(src) {
         }
         else if (tokensArray[0] === ")") {
             tokens.push(token(tokensArray.shift(), TokenType.CloseParen));
-        } // hanlde binary operators
+        }
+        else if (tokensArray[0] === "{") {
+            tokens.push(token(tokensArray.shift(), TokenType.OpenBrace));
+        }
+        else if (tokensArray[0] === "}") {
+            tokens.push(token(tokensArray.shift(), TokenType.CloseBrace));
+        }
+        // hanlde binary operators
         else if (tokensArray[0] === "+" ||
             tokensArray[0] === "-" ||
             tokensArray[0] === "/" ||
@@ -57,6 +76,12 @@ function tokenizer(src) {
         }
         else if (tokensArray[0] === ";") {
             tokens.push(token(tokensArray.shift(), TokenType.Semicolon));
+        }
+        else if (tokensArray[0] === ":") {
+            tokens.push(token(tokensArray.shift(), TokenType.Colon));
+        }
+        else if (tokensArray[0] === ",") {
+            tokens.push(token(tokensArray.shift(), TokenType.Comma));
         } //handle multicharacter tokens like 123 or let or <=, we should check if it's correct one
         else {
             // handle numeric literalls -> integers

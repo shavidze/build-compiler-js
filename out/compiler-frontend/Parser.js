@@ -70,7 +70,7 @@ class Parser {
         return this.parse_assignment_expr();
     }
     parse_assignment_expr() {
-        const left = this.parse_additive_expr();
+        const left = this.parse_object_expr();
         if (this.firstToken().type === Lexer_1.TokenType.Equals) {
             this.eat();
             const value = this.parse_assignment_expr();
@@ -81,6 +81,47 @@ class Parser {
             };
         }
         return left;
+    }
+    parse_object_expr() {
+        // {prop[]}
+        if (this.firstToken().type !== Lexer_1.TokenType.OpenBrace) {
+            return this.parse_additive_expr();
+        }
+        this.eat(); // advance past open brace
+        const properties = new Array();
+        console.log("aqaaaaa");
+        while (this.not_eof() && this.firstToken().type != Lexer_1.TokenType.CloseBrace) {
+            //{key: val, key2: val}
+            const key = this.expect(Lexer_1.TokenType.Identifier, "Object literal key expected").value;
+            // { x, }
+            if (this.firstToken().type == Lexer_1.TokenType.Comma) {
+                this.eat();
+                properties.push({
+                    key,
+                    kind: "Property",
+                    value: undefined,
+                });
+                continue;
+            }
+            else if (this.firstToken().type == Lexer_1.TokenType.CloseBrace) {
+                properties.push({
+                    key,
+                    kind: "Property",
+                    value: undefined,
+                });
+                continue;
+            }
+            // { key: val}
+            this.expect(Lexer_1.TokenType.Colon, "Missing colon following identifier in Object Expr");
+            // parse value expression of key
+            const value = this.parse_expr();
+            properties.push({ kind: "Property", value, key });
+            if (this.firstToken().type != Lexer_1.TokenType.CloseBrace) {
+                this.expect(Lexer_1.TokenType.Comma, "Expected comma or closing following property ");
+            }
+        }
+        this.expect(Lexer_1.TokenType.CloseBrace, "Object literal missing closing brace.");
+        return { kind: "ObjectLiteral", properties };
     }
     //მოქმედებების თანმიმდევრობა
     // Assignment Express
@@ -136,7 +177,7 @@ class Parser {
                     kind: "NumericLiteral",
                     value: parseFloat(this.eat().value),
                 };
-            case Lexer_1.TokenType.OpenParen: {
+            case (Lexer_1.TokenType.OpenParen, Lexer_1.TokenType.OpenBrace): {
                 this.eat();
                 const value = this.parse_expr();
                 this.expect(Lexer_1.TokenType.CloseParen, "Unexpected token was found inside the parenthesised expression. Expected closing par");
