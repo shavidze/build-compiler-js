@@ -1,12 +1,7 @@
 import Parser from "./compiler-frontend/Parser";
 import { evaluate } from "./comiler-runtime/interpreter";
 import { createGlobalEnv } from "./comiler-runtime/context";
-import {
-  MK_BOOL,
-  MK_NULL,
-  MK_NUMBER,
-  NumberVal,
-} from "./comiler-runtime/values";
+
 const prompt = require("prompt-sync")();
 repl();
 
