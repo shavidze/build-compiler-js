@@ -73,8 +73,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 If you have any questions, suggestions, or feedback, please feel free to [open an issue](https://github.com/shavidze/build-compiler-js/issues). We'd love to hear from you!
 
-```
-
-Make sure to replace the placeholders like `[Your Project Name]` with appropriate values. Additionally, update the installation, usage, and other sections based on the specific details of your project.
-
-Remember, the README should provide an overview of your project, installation instructions, usage examples, and any other relevant information that helps users understand and get started with your project.
